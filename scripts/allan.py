@@ -129,6 +129,8 @@ def main(args):
     else:
         currentAxis = axis # just loop one time and break
 
+    all_axis_info = []
+
     while (currentAxis <= 6):
         (taus_used, adev, adev_err, adev_n) = allantools.oadev(data[currentAxis-1], data_type='freq', rate=float(sampleRate), taus=np.array(taus) )
 
@@ -174,35 +176,66 @@ def main(args):
         finally:
             f.close()
 
-        """""""""""""""
-        " Plot Result "
-        """""""""""""""
-        plt.figure(figsize=(12,8))
-        ax = plt.gca()
-        ax.set_yscale('log')
-        ax.set_xscale('log')
 
+        all_axis_info.append((taus_used, adev, 
+                                randomWalkSegment, randomWalk,
+                                biasInstabilityPoint))
+
+        currentAxis = currentAxis + 1 + axis*6 # increment currentAxis also break if axis is not =0
+
+
+    # Plot Acceleration Result 
+    plt.figure(figsize=(12,8))
+    ax = plt.gca()
+    ax.set_yscale('log')
+    ax.set_xscale('log')
+    for i in range(0, 3):
+        taus_used = all_axis_info[i][0]
+        adev = all_axis_info[i][1]
         plt.plot(taus_used,adev)
-        plt.plot([randomWalkSegment[0],randomWalkSegment[2]],
-                 [randomWalkSegment[1],randomWalkSegment[3]],'k--')
-        plt.plot(1,randomWalk,'rx',markeredgewidth=2.5,markersize=14.0)
-        plt.plot(biasInstabilityPoint[0],biasInstabilityPoint[1],'ro')
 
         plt.grid(True, which="both")
-        plt.title(title)
+        plt.title('Allan Deviation Accelerometer')
         plt.xlabel('Tau (s)')
         plt.ylabel('ADEV')
+
+        # plt.plot([randomWalkSegment[0],randomWalkSegment[2]],
+        #          [randomWalkSegment[1],randomWalkSegment[3]],'k--')
+        # plt.plot(1,randomWalk,'rx',markeredgewidth=2.5,markersize=14.0)
+        # plt.plot(biasInstabilityPoint[0],biasInstabilityPoint[1],'ro')
 
         for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
                     ax.get_xticklabels() + ax.get_yticklabels()):
             item.set_fontsize(20)
-
         plt.show(block=False)
+    plt.savefig(resultsPath + 'allan_accel')
+        
+    # Plot Gyro Result 
+    plt.figure(figsize=(12,8))
+    ax = plt.gca()
+    ax.set_yscale('log')
+    ax.set_xscale('log')
+    for i in range(3, 6):
+        taus_used = all_axis_info[i][0]
+        adev = all_axis_info[i][1]
+        plt.plot(taus_used,adev)
 
-        plt.savefig(resultsPath + fname)
+        plt.grid(True, which="both")
+        plt.title('Allan Deviation Gyroscope')
+        plt.xlabel('Tau (s)')
+        plt.ylabel('ADEV')
 
-        currentAxis = currentAxis + 1 + axis*6 # increment currentAxis also break if axis is not =0
+        # plt.plot([randomWalkSegment[0],randomWalkSegment[2]],
+        #          [randomWalkSegment[1],randomWalkSegment[3]],'k--')
+        # plt.plot(1,randomWalk,'rx',markeredgewidth=2.5,markersize=14.0)
+        # plt.plot(biasInstabilityPoint[0],biasInstabilityPoint[1],'ro')
 
+        for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
+                    ax.get_xticklabels() + ax.get_yticklabels()):
+            item.set_fontsize(20)
+        plt.show(block=False)
+    plt.savefig(resultsPath + 'allan_gyro')
+        
     inp=raw_input("Press Enter key to close figures and end program\n")
 
 if __name__ == '__main__':
