@@ -285,7 +285,7 @@ def main(args):
         gyro_axis_info.append(
             (taus_used, adev, rate_rand_walk, ang_rand_walk))
 
-        print "[%0.2f seconds] Finished calculating allan variance for gyro axis %d" % (rospy.get_time()-t0, axis)
+        print "[%0.2f seconds] Finished calculating allan variance for gyro axis %d" % (rospy.get_time()-t0, axis-3)
 
     plot_n_save(accel_axis_info, 'acceleration', resultsPath)
     plot_n_save(gyro_axis_info, 'gyroscope', resultsPath)
