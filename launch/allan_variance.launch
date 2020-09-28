@@ -1,7 +1,6 @@
 <launch>
   <arg name="bagfile_path" doc="The global path to the bagile containing static IMU data."/>
   <arg name="imu_topic_name" default="/imu"/>
-  <arg name="axis" default="0"/>
   <arg name="sample_rate"/>
   <arg name="delta_measurement" default="false"/>
   <arg name="number_of_lags" default="1000" />
@@ -9,7 +8,6 @@
   <node pkg="allan_variance" type="allan.py" name="allan_variance" output="screen" required="false">
   	<param name="bagfile_path" value="$(arg bagfile_path)"/>
   	<param name="imu_topic_name" value="$(arg imu_topic_name)"/>
-  	<param name="axis" value="0"/>
   	<param name="sample_rate" value="$(arg sample_rate)"/>
     <param name="delta_measurement" value="$(arg delta_measurement)"/>
   	<param name="number_of_lags" value="$(arg number_of_lags)"/>
