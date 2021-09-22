@@ -1,3 +1,6 @@
+# Solve the issue with original allan_variance #
+https://github.com/UZ-SLAMLab/ORB_SLAM3/issues/125#issuecomment-705382437
+
 # allan_variance #
 Code for IMU characterization using Allan variance techniques. Plays nicely with ROS bagfiles.
 
